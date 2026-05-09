@@ -16,6 +16,10 @@
       --color-dark-gray-hover: hsl(0, 0%, 36%);
       --color-medium-gray: hsl(0, 0%, 59%);
       --color-light-gray: hsl(0, 0%, 85%);
+      --overlay-dark: rgba(0, 0, 0, 0.15);
+      --shadow-search: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.1);
+      --shadow-card: 0 1.25rem 1.875rem -0.9375rem rgba(0, 0, 0, 0.15);
+      --shadow-text: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
     }
 
     * {
@@ -34,10 +38,10 @@
     }
 
     .header {
-      background-image: url('images/pattern-bg-desktop.png');
+      background-image: url('images/pattern-bg-mobile.png');
       background-size: cover;
       background-position: center;
-      height: var(--header-height);
+      height: var(--header-height-mobile);
       position: relative;
       display: flex;
       flex-direction: column;
@@ -49,17 +53,17 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.15);
+      background: var(--overlay-dark);
     }
 
     h1 {
       color: var(--color-white);
       font-weight: 500;
-      font-size: 1.8rem;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
       letter-spacing: -0.03125rem;
       margin-block-end: 1.5rem;
       z-index: 2;
-      text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+      text-shadow: var(--shadow-text);
     }
 
     .search-container {
@@ -67,7 +71,7 @@
       width: 90%;
       max-width: 31.25rem;
       z-index: 2;
-      box-shadow: 0 0.625rem 1.25rem rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-search);
       border-radius: 0.9375rem;
     }
 
@@ -77,7 +81,7 @@
       border: none;
       border-radius: 0.9375rem 0 0 0.9375rem;
       font-family: 'Rubik', sans-serif;
-      font-size: 1rem;
+      font-size: clamp(0.875rem, 2vw, 1rem);
       font-weight: 400;
       outline: none;
       cursor: pointer;
@@ -100,7 +104,7 @@
 
     @media (prefers-reduced-motion: no-preference) {
       .search-btn {
-        transition: background 0.2s;
+        transition: background-color 0.2s ease;
       }
     }
 
@@ -125,7 +129,7 @@
       background: var(--color-white);
       border-radius: 1.25rem;
       z-index: 10;
-      box-shadow: 0 1.25rem 1.875rem -0.9375rem rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-card);
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
@@ -161,59 +165,87 @@
 
     .info-value {
       font-weight: 500;
-      font-size: 1.3rem;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
       color: var(--color-dark-gray);
       overflow-wrap: anywhere;
     }
 
     .map {
-      height: calc(100vh - var(--header-height));
+      height: calc(100vh - var(--header-height-mobile));
       width: 100%;
+      position: relative;
       z-index: 1;
     }
 
 
 
-    /* ---- Mobile styles ---- */
-    @media (max-width: 46.875rem) {
+    /* ---- Desktop styles ---- */
+    @media (min-width: 46.875rem) {
       .header {
-        background-image: url('images/pattern-bg-mobile.png');
-        height: var(--header-height-mobile);
+        background-image: url('images/pattern-bg-desktop.png');
+        height: var(--header-height);
       }
 
       .map {
-        height: calc(100vh - var(--header-height-mobile));
+        height: calc(100vh - var(--header-height));
       }
 
       .info-card {
-        top: var(--header-height-mobile);
-        transform: translate(-50%, -20%);
-        flex-direction: column;
-        text-align: center;
-        gap: 0.8rem;
-        margin-block-start: -50px;
-        padding: 1rem;
+        top: var(--header-height);
+      }
+    }
+
+    /* ---- Mobile overrides ---- */
+    .info-card {
+      top: var(--header-height-mobile);
+      transform: translate(-50%, -20%);
+      flex-direction: column;
+      text-align: center;
+      gap: 0.8rem;
+      margin-block-start: -3.125rem;
+      padding: 1rem;
+    }
+
+    .info-item {
+      border-bottom: 0.0625rem solid hsl(0, 0%, 90%);
+      padding-block-end: 0.8rem;
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-item::after {
+      display: none;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+    }
+
+    /* Desktop: restore card and items */
+    @media (min-width: 46.875rem) {
+      .info-card {
+        top: var(--header-height);
+        transform: translate(-50%, -50%);
+        flex-direction: row;
+        text-align: left;
+        gap: 1rem;
+        margin-block-start: 0;
+        padding: 2.5rem 2rem;
       }
 
       .info-item {
-        border-bottom: 1px solid hsl(0, 0%, 90%);
-        padding-block-end: 0.8rem;
-      }
-
-      .info-item:last-child {
         border-bottom: none;
+        padding-block-end: 0;
       }
 
       .info-item::after {
-        display: none;
-      }
-
-      .info-value {
-        font-size: 1rem;
+        display: block;
       }
 
       h1 {
-        font-size: 1.4rem;
+        font-size: clamp(1.4rem, 4vw, 1.8rem);
       }
     }
   </style>
@@ -255,7 +287,15 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    let map = L.map('map', { preferCanvas: true }).setView([40.6782, -73.9442], 13);
+    let map = L.map('map', {
+      preferCanvas: true,
+      zoomControl: false,
+      attributionControl: false
+    }).setView([40.6782, -73.9442], 13);
+
+    L.control.attribution({
+      prefix: false
+    }).addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>').addTo(map);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -269,7 +309,13 @@
       iconAnchor: [23, 56],
     });
 
-    let marker = L.marker([40.6782, -73.9442], { icon: locationIcon }).addTo(map);
+    let marker = L.marker([40.6782, -73.9442], { icon: locationIcon, interactive: false }).addTo(map);
+
+    // Clean up Leaflet's inline styles on elements we control via CSS
+    setTimeout(() => {
+      const mapEl = document.getElementById('map');
+      if (mapEl) mapEl.removeAttribute('style');
+    }, 100);
 
     const apiKey = 'at_6dX7XYdITmkpF6g9HcTOWCoJX0Adj';
 
