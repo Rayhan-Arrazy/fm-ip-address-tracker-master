@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>IP Address Tracker | Rayhan Arrazy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+    :root {
+      --header-height: 300px;
+      --header-height-mobile: 280px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Rubik', sans-serif;
+      font-size: 18px;
+      background-color: #fff;
+      height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    .header {
+      background-image: url('images/pattern-bg-desktop.png');
+      background-size: cover;
+      background-position: center;
+      height: var(--header-height);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 2rem;
+    }
+
+    @media (max-width: 750px) {
+      .header {
+        background-image: url('images/pattern-bg-mobile.png');
+        height: var(--header-height-mobile);
+      }
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      color: white;
+      font-weight: 500;
+      font-size: 1.8rem;
+      letter-spacing: -0.5px;
+      margin-bottom: 1.5rem;
+      z-index: 2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .search-container {
+      display: flex;
+      width: 90%;
+      max-width: 500px;
+      z-index: 2;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 15px;
+    }
+
+    #ip-input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 15px 0 0 15px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      outline: none;
+      cursor: pointer;
+    }
+
+    #ip-input::placeholder {
+      color: hsl(0, 0%, 59%);
+    }
+
+    button {
+      background-color: black;
+      border: none;
+      border-radius: 0 15px 15px 0;
+      width: 60px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button:hover {
+      background-color: #2c2c2c;
+    }
+
+    button img {
+      width: 12px;
+      height: 12px;
+      filter: brightness(0) invert(1);
+    }
+
+    .info-card {
+      position: absolute;
+      top: var(--header-height);
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 1100px;
+      padding: 2.5rem 2rem;
+      background: white;
+      border-radius: 20px;
+      z-index: 10;
+      box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      text-align: left;
+      gap: 1rem;
+    }
+
+    .info-item {
+      position: relative;
+      flex: 1;
+      padding: 0 2rem;
+    }
+
+    .info-item:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 70px;
+      width: 1px;
+      background-color: hsl(0, 0%, 85%);
+    }
+
+
+    .info-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: hsl(0, 0%, 59%);
+      margin-bottom: 0.6rem;
+    }
+
+    .info-value {
+      font-weight: 500;
+      font-size: 1.3rem;
+      color: #2c2c2c;
+      word-break: break-word;
+    }
+
+    #map {
+      height: calc(100vh - var(--header-height));
+      width: 100%;
+      z-index: 1;
+    }
+
+    @media (max-width: 750px) {
+      #map {
+        height: calc(100vh - var(--header-height-mobile));
+      }
+    }
+
+    @media (max-width: 750px) {
+      .info-card {
+        top: var(--header-height-mobile);
+        transform: translate(-50%, -20%);
+        flex-direction: column;
+        text-align: center;
+        gap: 0.8rem;
+        margin-top: -50px;
+        padding: 1rem;
+      }
+
+      .info-item {
+        border-bottom: 1px solid hsl(0, 0%, 90%);
+        padding-bottom: 0.8rem;
+      }
+
+      .info-item:last-child {
+        border-bottom: none;
+      }
+
+
+      .info-item::after {
+        display: none;
+      }
+
+      .info-value {
+        font-size: 1rem;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      .header {
+        height: var(--header-height-mobile);
+      }
+
+      #map {
+        height: calc(100vh - var(--header-height-mobile));
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>IP Address Tracker</h1>
+    <div class="search-container">
+      <input type="text" id="ip-input" placeholder="Search for any IP address or domain">
+      <button id="search-btn">
+        <img src="images/icon-arrow.svg" alt="arrow">
+      </button>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-item">
+      <div class="info-label">IP ADDRESS</div>
+      <div class="info-value" id="ip-address">192.212.174.101</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">LOCATION</div>
+      <div class="info-value" id="location">Brooklyn, NY 10001</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">TIMEZONE</div>
+      <div class="info-value" id="timezone">UTC -05:00</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">ISP</div>
+      <div class="info-value" id="isp">SpaceX Starlink</div>
+    </div>
+  </div>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    let map = L.map('map').setView([40.6782, -73.9442], 13);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    let marker = L.marker([40.6782, -73.9442]).addTo(map);
+
+    async function fetchIPData(ipOrDomain = '') {
+      document.getElementById('ip-address').innerText = 'Fetching...';
+      document.getElementById('location').innerText = '...';
+      document.getElementById('timezone').innerText = '...';
+      document.getElementById('isp').innerText = '...';
+
+      let url = '';
+      if (ipOrDomain.trim() === '') {
+        url = 'https://ipapi.co/json/';
+      } else {
+        url = `https://ipapi.co/${encodeURIComponent(ipOrDomain)}/json/`;
+      }
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.error || data.reason) {
+          alert('Invalid IP address or domain. Please try again.');
+          updateUI('192.212.174.101', 'Brooklyn, NY 10001', 'UTC -05:00', 'SpaceX Starlink', 40.6782, -73.9442);
+          return;
+        }
+
+        const ip = data.ip;
+        const city = data.city || 'Unknown';
+        const region = data.region || '';
+        const postal = data.postal || '';
+        let locationString = `${city}, ${region} ${postal}`.trim();
+        if (locationString === ',' || locationString === '') locationString = data.country_name || 'Unknown';
+
+        const timezone = data.timezone || 'UTC';
+        const isp = data.org || 'Not available';
+        const lat = data.latitude;
+        const lng = data.longitude;
+
+        if (lat && lng) {
+          updateUI(ip, locationString, timezone, isp, lat, lng);
+        } else {
+          updateUI(ip, locationString, timezone, isp, 40.6782, -73.9442);
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('Failed to fetch IP data. Please try again later.');
+        updateUI('192.212.174.101', 'Brooklyn, NY 10001', 'UTC -05:00', 'SpaceX Starlink', 40.6782, -73.9442);
+      }
+    }
+
+    function updateUI(ip, location, timezone, isp, lat, lng) {
+      document.getElementById('ip-address').innerText = ip;
+      document.getElementById('location').innerText = location;
+      document.getElementById('timezone').innerText = timezone;
+      document.getElementById('isp').innerText = isp;
+
+      map.setView([lat, lng], 13);
+
+      if (marker) {
+        marker.setLatLng([lat, lng]);
+      } else {
+        marker = L.marker([lat, lng]).addTo(map);
+      }
+    }
+
+    const searchBtn = document.getElementById('search-btn');
+    const inputField = document.getElementById('ip-input');
+
+    searchBtn.addEventListener('click', () => {
+      const query = inputField.value.trim();
+      if (query === '') {
+        fetchIPData('');
+      } else {
+        fetchIPData(query);
+      }
+    });
+
+    inputField.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        searchBtn.click();
+      }
+    });
+
+    window.addEventListener('load', () => {
+      fetchIPData('');
+    });
+  </script>
+</body>
+
+</html>
