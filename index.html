@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IP Address Tracker | Rayhan Arrazy</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -78,7 +78,7 @@
       border-radius: 15px;
     }
 
-    #ip-input {
+    .ip-input {
       flex: 1;
       padding: 1rem 1.5rem;
       border: none;
@@ -90,7 +90,7 @@
       cursor: pointer;
     }
 
-    #ip-input::placeholder {
+    .ip-input::placeholder {
       color: hsl(0, 0%, 59%);
     }
 
@@ -226,38 +226,38 @@
 </head>
 
 <body>
+  <main>
+    <div class="header">
+      <h1>IP Address Tracker</h1>
+      <div class="search-container">
+        <input type="text" class="ip-input" placeholder="Search for any IP address or domain">
+        <button type="button" id="search-btn" class="search-btn">
+          <img src="images/icon-arrow.svg" alt="arrow">
+        </button>
+      </div>
+    </div>
 
-  <div class="header">
-    <h1>IP Address Tracker</h1>
-    <div class="search-container">
-      <input type="text" id="ip-input" placeholder="Search for any IP address or domain">
-      <button id="search-btn">
-        <img src="images/icon-arrow.svg" alt="arrow">
-      </button>
+    <div class="info-card">
+      <div class="info-item">
+        <div class="info-label">IP ADDRESS</div>
+        <div class="info-value" id="ip-address">192.212.174.101</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">LOCATION</div>
+        <div class="info-value" id="location">Brooklyn, NY 10001</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">TIMEZONE</div>
+        <div class="info-value" id="timezone">UTC -05:00</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">ISP</div>
+        <div class="info-value" id="isp">SpaceX Starlink</div>
+      </div>
     </div>
-  </div>
 
-  <div class="info-card">
-    <div class="info-item">
-      <div class="info-label">IP ADDRESS</div>
-      <div class="info-value" id="ip-address">192.212.174.101</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">LOCATION</div>
-      <div class="info-value" id="location">Brooklyn, NY 10001</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">TIMEZONE</div>
-      <div class="info-value" id="timezone">UTC -05:00</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">ISP</div>
-      <div class="info-value" id="isp">SpaceX Starlink</div>
-    </div>
-  </div>
-
-  <div id="map"></div>
-
+    <div id="map"></div>
+  </main>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     let map = L.map('map').setView([40.6782, -73.9442], 13);
