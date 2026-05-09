@@ -70,7 +70,7 @@
     .search-container {
       display: flex;
       width: 90%;
-      max-width: 31.25rem;
+      max-width: min(31.25rem, 90vw);
       z-index: 2;
       box-shadow: var(--shadow-search);
       border-radius: 0.9375rem;
@@ -147,7 +147,7 @@
     .info-item {
       position: relative;
       flex: 1;
-      padding: 0 2rem;
+      padding: 0 clamp(1rem, 5vw, 2rem);
       border-bottom: 0.0625rem solid var(--color-border);
       padding-block-end: 0.8rem;
     }
@@ -174,7 +174,7 @@
       text-transform: uppercase;
       letter-spacing: calc(1.5rem / 16);
       color: var(--color-medium-gray);
-      margin-block-end: 0.6rem;
+      margin-block-end: calc(9.6rem / 16);
     }
 
     .info-value {
@@ -203,7 +203,7 @@
         transform: translate(-50%, -50%);
         flex-direction: row;
         text-align: left;
-        gap: 1rem;
+        gap: clamp(0.5rem, 2vw, 1rem);
         margin-block-start: 0;
       }
 
