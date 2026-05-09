@@ -222,6 +222,14 @@
         height: calc(100vh - var(--header-height-mobile));
       }
     }
+
+    .map-marker-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      outline: none;
+    }
   </style>
 </head>
 
@@ -230,7 +238,7 @@
     <div class="header">
       <h1>IP Address Tracker</h1>
       <div class="search-container">
-        <input type="text" class="ip-input" placeholder="Search for any IP address or domain">
+        <input type="text" id="ip-input" class="ip-input" placeholder="Search for any IP address or domain">
         <button type="button" id="search-btn" class="search-btn">
           <img src="images/icon-arrow.svg" alt="arrow">
         </button>
@@ -268,12 +276,14 @@
       maxZoom: 19
     }).addTo(map);
 
-    const locationIcon = L.icon({
-      iconUrl: 'images/icon-location.svg',
+    const locationIcon = L.divIcon({
+      html: `<button type="button" class="map-marker-btn" aria-label="Location marker">
+           <img src="images/icon-location.svg" alt="">
+         </button>`,
+      className: '',
       iconSize: [46, 56],
       iconAnchor: [23, 56],
     });
-
     let marker = L.marker([40.6782, -73.9442], { icon: locationIcon }).addTo(map);
 
     const apiKey = 'at_6dX7XYdITmkpF6g9HcTOWCoJX0Adj';
@@ -360,6 +370,10 @@
     });
 
     window.addEventListener('load', () => {
+      setTimeout(() => {
+        initMap();
+      }, 1000);
+
       fetchIPData('');
     });
   </script>
