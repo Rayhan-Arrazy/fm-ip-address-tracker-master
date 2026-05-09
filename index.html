@@ -61,7 +61,7 @@
       color: var(--color-white);
       font-weight: 500;
       font-size: clamp(1.4rem, 4vw, 1.8rem);
-      letter-spacing: -0.03125rem;
+      letter-spacing: calc(-0.5rem / 16);
       margin-block-end: clamp(1rem, 3vw, 1.5rem);
       z-index: 2;
       text-shadow: var(--shadow-text);
@@ -140,7 +140,7 @@
       flex-direction: column;
       text-align: center;
       gap: 0.8rem;
-      margin-block-start: -3.125rem;
+      margin-block-start: clamp(-3.125rem, -5vw, -1rem);
       top: var(--header-height-mobile);
     }
 
@@ -172,7 +172,7 @@
       font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.09375rem;
+      letter-spacing: calc(1.5rem / 16);
       color: var(--color-medium-gray);
       margin-block-end: 0.6rem;
     }
