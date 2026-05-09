@@ -8,11 +8,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
-
     :root {
       --header-height: 300px;
       --header-height-mobile: 280px;
+      --color-white: hsl(0, 0%, 100%);
+      --color-dark-gray: hsl(0, 0%, 17%);
+      --color-dark-gray-hover: hsl(0, 0%, 36%);
+      --color-medium-gray: hsl(0, 0%, 59%);
+      --color-light-gray: hsl(0, 0%, 85%);
     }
 
     * {
@@ -23,8 +26,8 @@
 
     body {
       font-family: 'Rubik', sans-serif;
-      font-size: 18px;
-      background-color: #fff;
+      font-size: 1.125rem;
+      background-color: var(--color-white);
       height: 100vh;
       width: 100%;
       position: relative;
@@ -39,32 +42,22 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 2rem;
-    }
-
-    @media (max-width: 46.875rem) {
-      .header {
-        background-image: url('images/pattern-bg-mobile.png');
-        height: var(--header-height-mobile);
-      }
+      padding-block-start: 2rem;
     }
 
     .header::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0, 0, 0, 0.15);
     }
 
     h1 {
-      color: white;
+      color: var(--color-white);
       font-weight: 500;
       font-size: 1.8rem;
       letter-spacing: -0.5px;
-      margin-bottom: 1.5rem;
+      margin-block-end: 1.5rem;
       z-index: 2;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
@@ -91,26 +84,31 @@
     }
 
     .ip-input::placeholder {
-      color: hsl(0, 0%, 59%);
+      color: var(--color-medium-gray);
     }
 
-    button {
-      background-color: black;
+    .search-btn {
+      background-color: var(--color-dark-gray);
       border: none;
       border-radius: 0 15px 15px 0;
       width: 60px;
       cursor: pointer;
-      transition: background 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    button:hover {
-      background-color: #2c2c2c;
+    @media (prefers-reduced-motion: no-preference) {
+      .search-btn {
+        transition: background 0.2s;
+      }
     }
 
-    button img {
+    .search-btn:hover {
+      background-color: var(--color-dark-gray-hover);
+    }
+
+    .search-btn img {
       width: 12px;
       height: 12px;
       filter: brightness(0) invert(1);
@@ -124,7 +122,7 @@
       width: 90%;
       max-width: 1100px;
       padding: 2.5rem 2rem;
-      background: white;
+      background: var(--color-white);
       border-radius: 20px;
       z-index: 10;
       box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.15);
@@ -149,24 +147,23 @@
       transform: translateY(-50%);
       height: 70px;
       width: 1px;
-      background-color: hsl(0, 0%, 85%);
+      background-color: var(--color-light-gray);
     }
-
 
     .info-label {
       font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      color: hsl(0, 0%, 59%);
-      margin-bottom: 0.6rem;
+      color: var(--color-medium-gray);
+      margin-block-end: 0.6rem;
     }
 
     .info-value {
       font-weight: 500;
       font-size: 1.3rem;
-      color: #2c2c2c;
-      word-break: break-word;
+      color: var(--color-dark-gray);
+      overflow-wrap: anywhere;
     }
 
     .map {
@@ -175,32 +172,43 @@
       z-index: 1;
     }
 
+    .map-marker-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* ---- Mobile styles ---- */
     @media (max-width: 46.875rem) {
+      .header {
+        background-image: url('images/pattern-bg-mobile.png');
+        height: var(--header-height-mobile);
+      }
+
       .map {
         height: calc(100vh - var(--header-height-mobile));
       }
-    }
 
-    @media (max-width: 46.875rem) {
       .info-card {
         top: var(--header-height-mobile);
         transform: translate(-50%, -20%);
         flex-direction: column;
         text-align: center;
         gap: 0.8rem;
-        margin-top: -50px;
+        margin-block-start: -50px;
         padding: 1rem;
       }
 
       .info-item {
         border-bottom: 1px solid hsl(0, 0%, 90%);
-        padding-bottom: 0.8rem;
+        padding-block-end: 0.8rem;
       }
 
       .info-item:last-child {
         border-bottom: none;
       }
-
 
       .info-item::after {
         display: none;
@@ -213,22 +221,6 @@
       h1 {
         font-size: 1.4rem;
       }
-
-      .header {
-        height: var(--header-height-mobile);
-      }
-
-      .map {
-        height: calc(100vh - var(--header-height-mobile));
-      }
-    }
-
-    .map-marker-btn {
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      outline: none;
     }
   </style>
 </head>
@@ -240,7 +232,7 @@
       <div class="search-container">
         <input type="text" id="ip-input" class="ip-input" placeholder="Search for any IP address or domain">
         <button type="button" id="search-btn" class="search-btn">
-          <img src="images/icon-arrow.svg" alt="arrow">
+          <img src="images/icon-arrow.svg" alt="Search">
         </button>
       </div>
     </div>
@@ -266,9 +258,10 @@
 
     <div id="map" class="map"></div>
   </main>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    let map = L.map('map').setView([40.6782, -73.9442], 13);
+    let map = L.map('map', { preferCanvas: true }).setView([40.6782, -73.9442], 13);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -278,12 +271,13 @@
 
     const locationIcon = L.divIcon({
       html: `<button type="button" class="map-marker-btn" aria-label="Location marker">
-           <img src="images/icon-location.svg" alt="">
-         </button>`,
+               <img src="images/icon-location.svg" alt="">
+             </button>`,
       className: '',
       iconSize: [46, 56],
       iconAnchor: [23, 56],
     });
+
     let marker = L.marker([40.6782, -73.9442], { icon: locationIcon }).addTo(map);
 
     const apiKey = 'at_6dX7XYdITmkpF6g9HcTOWCoJX0Adj';
@@ -313,6 +307,7 @@
           updateUI('192.212.174.101', 'Brooklyn, NY 10001', 'UTC -05:00', 'SpaceX Starlink', 40.6782, -73.9442);
           return;
         }
+
         const ip = data.ip;
         const city = data.location.city || '';
         const region = data.location.region || '';
@@ -330,7 +325,6 @@
         }
 
       } catch (error) {
-        console.error('Error fetching data:', error);
         alert('Failed to fetch IP data. Please try again later.');
         updateUI('192.212.174.101', 'Brooklyn, NY 10001', 'UTC -05:00', 'SpaceX Starlink', 40.6782, -73.9442);
       }
@@ -343,12 +337,7 @@
       document.getElementById('isp').innerText = isp;
 
       map.setView([lat, lng], 13);
-
-      if (marker) {
-        marker.setLatLng([lat, lng]);
-      } else {
-        marker = L.marker([lat, lng]).addTo(map);
-      }
+      marker.setLatLng([lat, lng]);
     }
 
     const searchBtn = document.getElementById('search-btn');
@@ -356,11 +345,7 @@
 
     searchBtn.addEventListener('click', () => {
       const query = inputField.value.trim();
-      if (query === '') {
-        fetchIPData('');
-      } else {
-        fetchIPData(query);
-      }
+      fetchIPData(query);
     });
 
     inputField.addEventListener('keypress', (e) => {
@@ -369,13 +354,7 @@
       }
     });
 
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        initMap();
-      }, 1000);
-
-      fetchIPData('');
-    });
+    fetchIPData('');
   </script>
 </body>
 
