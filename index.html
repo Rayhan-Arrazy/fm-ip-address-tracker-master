@@ -268,7 +268,15 @@
       maxZoom: 19
     }).addTo(map);
 
-    let marker = L.marker([40.6782, -73.9442]).addTo(map);
+    const locationIcon = L.icon({
+      iconUrl: 'images/icon-location.svg',
+      iconSize: [46, 56],
+      iconAnchor: [23, 56],
+    });
+
+    let marker = L.marker([40.6782, -73.9442], { icon: locationIcon }).addTo(map);
+
+    const apiKey = 'at_6dX7XYdITmkpF6g9HcTOWCoJX0Adj';
 
     async function fetchIPData(ipOrDomain = '') {
       document.getElementById('ip-address').innerText = 'Fetching...';
@@ -276,34 +284,34 @@
       document.getElementById('timezone').innerText = '...';
       document.getElementById('isp').innerText = '...';
 
-      let url = '';
-      if (ipOrDomain.trim() === '') {
-        url = 'https://ipapi.co/json/';
-      } else {
-        url = `https://ipapi.co/${encodeURIComponent(ipOrDomain)}/json/`;
+      let url = `https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}`;
+
+      if (ipOrDomain.trim() !== '') {
+        if (/[a-zA-Z]/.test(ipOrDomain)) {
+          url += `&domain=${encodeURIComponent(ipOrDomain)}`;
+        } else {
+          url += `&ipAddress=${encodeURIComponent(ipOrDomain)}`;
+        }
       }
 
       try {
         const response = await fetch(url);
         const data = await response.json();
 
-        if (data.error || data.reason) {
+        if (!response.ok) {
           alert('Invalid IP address or domain. Please try again.');
           updateUI('192.212.174.101', 'Brooklyn, NY 10001', 'UTC -05:00', 'SpaceX Starlink', 40.6782, -73.9442);
           return;
         }
-
         const ip = data.ip;
-        const city = data.city || 'Unknown';
-        const region = data.region || '';
-        const postal = data.postal || '';
-        let locationString = `${city}, ${region} ${postal}`.trim();
-        if (locationString === ',' || locationString === '') locationString = data.country_name || 'Unknown';
-
-        const timezone = data.timezone || 'UTC';
-        const isp = data.org || 'Not available';
-        const lat = data.latitude;
-        const lng = data.longitude;
+        const city = data.location.city || '';
+        const region = data.location.region || '';
+        const postal = data.location.postalCode || '';
+        const locationString = `${city}, ${region} ${postal}`.trim();
+        const timezone = `UTC ${data.location.timezone}`;
+        const isp = data.isp || 'Not available';
+        const lat = data.location.lat;
+        const lng = data.location.lng;
 
         if (lat && lng) {
           updateUI(ip, locationString, timezone, isp, lat, lng);
