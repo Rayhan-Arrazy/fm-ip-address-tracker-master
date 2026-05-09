@@ -139,7 +139,7 @@
       display: flex;
       flex-direction: column;
       text-align: center;
-      gap: 0.8rem;
+      gap: clamp(0.5rem, 2vw, 0.8rem);
       margin-block-start: clamp(-3.125rem, -5vw, -1rem);
       top: var(--header-height-mobile);
     }
@@ -149,7 +149,7 @@
       flex: 1;
       padding: 0 clamp(1rem, 5vw, 2rem);
       border-bottom: 0.0625rem solid var(--color-border);
-      padding-block-end: 0.8rem;
+      padding-block-end: clamp(0.5rem, 2vw, 0.8rem);
     }
 
     .info-item:last-child {
