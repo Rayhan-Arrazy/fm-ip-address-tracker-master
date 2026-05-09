@@ -78,7 +78,7 @@
 
     .ip-input {
       flex: 1;
-      padding: 1rem 1.5rem;
+      padding: 1rem clamp(1rem, 3vw, 1.5rem);
       border: none;
       border-radius: 0.9375rem 0 0 0.9375rem;
       font-family: 'Rubik', sans-serif;
@@ -106,6 +106,12 @@
     @media (prefers-reduced-motion: no-preference) {
       .search-btn {
         transition: background-color 0.2s ease;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .search-btn {
+        transition: none;
       }
     }
 
@@ -364,10 +370,15 @@
           m.removeAttribute('alt');
           m.removeAttribute('role');
         });
-        
-        // 2. Kill the map container's inline style
+
+        // 2. Kill the map container and panes' inline style
         const mapEl = document.getElementById('map');
         if (mapEl && mapEl.hasAttribute('style')) mapEl.removeAttribute('style');
+
+        const panes = document.querySelectorAll('.leaflet-pane');
+        panes.forEach(p => {
+          if (p.hasAttribute('style')) p.removeAttribute('style');
+        });
       });
     });
 
