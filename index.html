@@ -130,10 +130,10 @@
       left: 50%;
       transform: translate(-50%, -20%);
       width: 90%;
-      max-width: 68.75rem;
+      max-width: min(68.75rem, 90vw);
       padding: clamp(1rem, 3vw, 2.5rem);
       background: var(--color-white);
-      border-radius: 1.25rem;
+      border-radius: clamp(1rem, 2.5vw, 1.25rem);
       z-index: 10;
       box-shadow: var(--shadow-card);
       display: flex;
@@ -162,14 +162,14 @@
       right: 0;
       top: 50%;
       transform: translateY(-50%);
-      height: 4.375rem;
-      width: 0.0625rem;
+      height: clamp(3rem, 10vw, 4.375rem);
+      width: calc(1rem / 16);
       background-color: var(--color-light-gray);
       display: none;
     }
 
     .info-label {
-      font-size: 0.7rem;
+      font-size: clamp(0.6rem, 1.5vw, 0.7rem);
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: calc(1.5rem / 16);
