@@ -56,7 +56,7 @@
       color: var(--color-white);
       font-weight: 500;
       font-size: 1.8rem;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.03125rem;
       margin-block-end: 1.5rem;
       z-index: 2;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -172,13 +172,7 @@
       z-index: 1;
     }
 
-    .map-marker-btn {
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      outline: none;
-    }
+
 
     /* ---- Mobile styles ---- */
     @media (max-width: 46.875rem) {
@@ -269,11 +263,8 @@
       maxZoom: 19
     }).addTo(map);
 
-    const locationIcon = L.divIcon({
-      html: `<button type="button" class="map-marker-btn" aria-label="Location marker">
-               <img src="images/icon-location.svg" alt="">
-             </button>`,
-      className: '',
+    const locationIcon = L.icon({
+      iconUrl: 'images/icon-location.svg',
       iconSize: [46, 56],
       iconAnchor: [23, 56],
     });
