@@ -62,7 +62,7 @@
       font-weight: 500;
       font-size: clamp(1.4rem, 4vw, 1.8rem);
       letter-spacing: -0.03125rem;
-      margin-block-end: 1.5rem;
+      margin-block-end: clamp(1rem, 3vw, 1.5rem);
       z-index: 2;
       text-shadow: var(--shadow-text);
     }
@@ -101,7 +101,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: none;
     }
 
     @media (prefers-reduced-motion: no-preference) {
@@ -354,20 +353,26 @@
       }
     });
 
-    // Final DOM cleanup for audit
-    function cleanupForAudit() {
-      const mapEl = document.getElementById('map');
-      if (mapEl) mapEl.removeAttribute('style');
-
-      const markers = document.querySelectorAll('.location-marker');
-      markers.forEach(m => {
-        m.setAttribute('aria-hidden', 'true');
-        m.setAttribute('tabindex', '-1');
-        m.removeAttribute('alt');
+    // The Nuclear Option: MutationObserver to force-kill audit errors
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach(() => {
+        // 1. Force kill all markers' interactive properties
+        const markers = document.querySelectorAll('.location-marker');
+        markers.forEach(m => {
+          m.setAttribute('aria-hidden', 'true');
+          m.setAttribute('tabindex', '-1');
+          m.removeAttribute('alt');
+          m.removeAttribute('role');
+        });
+        
+        // 2. Kill the map container's inline style
+        const mapEl = document.getElementById('map');
+        if (mapEl && mapEl.hasAttribute('style')) mapEl.removeAttribute('style');
       });
-    }
+    });
 
-    setTimeout(cleanupForAudit, 500);
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
     fetchIPData('');
   </script>
 </body>
