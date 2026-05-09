@@ -42,7 +42,7 @@
       padding-top: 2rem;
     }
 
-    @media (max-width: 750px) {
+    @media (max-width: 46.875rem) {
       .header {
         background-image: url('images/pattern-bg-mobile.png');
         height: var(--header-height-mobile);
@@ -169,19 +169,19 @@
       word-break: break-word;
     }
 
-    #map {
+    .map {
       height: calc(100vh - var(--header-height));
       width: 100%;
       z-index: 1;
     }
 
-    @media (max-width: 750px) {
-      #map {
+    @media (max-width: 46.875rem) {
+      .map {
         height: calc(100vh - var(--header-height-mobile));
       }
     }
 
-    @media (max-width: 750px) {
+    @media (max-width: 46.875rem) {
       .info-card {
         top: var(--header-height-mobile);
         transform: translate(-50%, -20%);
@@ -218,7 +218,7 @@
         height: var(--header-height-mobile);
       }
 
-      #map {
+      .map {
         height: calc(100vh - var(--header-height-mobile));
       }
     }
@@ -256,7 +256,7 @@
       </div>
     </div>
 
-    <div id="map"></div>
+    <div id="map" class="map"></div>
   </main>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
